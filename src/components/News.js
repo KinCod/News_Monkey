@@ -75,8 +75,8 @@ const News = (props)=> {
     setArticles(articles.concat(parseddata.articles))
     setTotalResults(parseddata.totalResults)
     setloading(false)
-  }
-
+    }
+    
     return (
       <>
       <LoadingBar
@@ -95,44 +95,48 @@ const News = (props)=> {
           </h1>
           {/* {this.state.loading && <Loading />} */}
         </div>
+        
+        {articles && 
+            <InfiniteScroll
+            dataLength={articles.length} 
+            next={fetchNextUsers}
+            hasMore={articles.length !== totalResults} //kab tak fetch krna hai kitna data aur hai
+            loader={<Loading />}
+            >
+        
+            {!loading &&
+              articles.map((element) => {
+                //using map we're looping through the object and accessing
+                //a single element each time
 
-        <InfiniteScroll
-          dataLength={articles.length} 
-          next={fetchNextUsers}
-          hasMore={articles.length !== totalResults} //kab tak fetch krna hai kitna data aur hai
-          loader={<Loading />}
-        >
-          {!loading &&
-            articles.map((element) => {
-              //using map we're looping through the object and accessing
-              //a single element each time
-
-              //idhar niche were returning on element at a time to the class accessing the component
-              return (
-                <span
-                  className=" inline-flex     
-            text-center my-10 sm:mb-80 md:mb-20 justify-center h-80 mx-10"
-                >
-                  <Newsitem
-                    date={element.publishedAt}
-                    key={element.url}
-                    imgurl={
-                      element.urlToImage
-                        ? element.urlToImage
-                        : "https://picsum.photos/200/300"
-                    }
-                    newsurl={element.url}
-                    heading={element.title ? element.title.slice(0, 80) : " "}
-                    description={
-                      element.description
-                        ? element.description.slice(0, 100)
-                        : " "
-                    }
-                  />
-                </span>
-              );
-            })}
-        </InfiniteScroll>
+                //idhar niche were returning on element at a time to the class accessing the component
+                return (
+                  <span
+                    className=" inline-flex     
+              text-center my-10 sm:mb-80 md:mb-20 justify-center h-80 mx-10"
+                  >
+                    <Newsitem
+                      date={element.publishedAt}
+                      key={element.url}
+                      imgurl={
+                        element.urlToImage
+                          ? element.urlToImage
+                          : "https://picsum.photos/200/300"
+                      }
+                      newsurl={element.url}
+                      heading={element.title ? element.title.slice(0, 80) : " "}
+                      description={
+                        element.description
+                          ? element.description.slice(0, 100)
+                          : " "
+                      }
+                    />
+                  </span>
+                );
+              })}
+          </InfiniteScroll>
+        }
+        
 
         {/* <div className="w-screen text-center container flex justify-around">
           <button
